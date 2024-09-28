@@ -1,4 +1,3 @@
-//your JS code here. If required.
 // Function to create a promise that resolves after a random time between 1 and 3 seconds
 function createRandomPromise(id) {
     return new Promise((resolve) => {
@@ -21,8 +20,10 @@ const loadingRow = document.getElementById('loading');
 
 // Using Promise.all to wait for all promises to resolve
 Promise.all(promises).then((results) => {
-    // Remove the loading row
-    outputElement.removeChild(loadingRow);
+    // Check if the loading row exists before trying to remove it
+    if (loadingRow) {
+        outputElement.removeChild(loadingRow);
+    }
 
     // Variable to track total time
     let totalTime = 0;
