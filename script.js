@@ -1,49 +1,36 @@
-// Function to create a promise that resolves after a random time between 1 and 3 seconds
-function createRandomPromise(id) {
-    return new Promise((resolve) => {
-        const timeTaken = (Math.random() * 2 + 1).toFixed(3);  // Time between 1 and 3 seconds, rounded to 3 decimal places
-        setTimeout(() => {
-            resolve({ id: `Promise ${id}`, time: parseFloat(timeTaken) });
-        }, timeTaken * 1000); // Convert to milliseconds
-    });
+let output = document.getElementById("output");
+
+function createPromise() {
+  return new Promise((resolve) => {
+    let time = Math.random() * (3000 - 1000) + 1000;
+    setTimeout(() => {
+      resolve(time);
+    }, time);
+  });
 }
 
-// Create an array of promises
-const promises = [
-    createRandomPromise(1),
-    createRandomPromise(2),
-    createRandomPromise(3),
-];
+let promise1 = createPromise();
+let promise2 = createPromise();
+let promise3 = createPromise();
 
-const outputElement = document.getElementById('output');
-const loadingRow = document.getElementById('loading');
+Promise.all([promise1, promise2, promise3]).then((time) => {
+  let totalTime = time.reduce((a, b) => a + b, 0);
 
-// Using Promise.all to wait for all promises to resolve
-Promise.all(promises).then((results) => {
-    // Check if the loading row exists before trying to remove it
-    if (loadingRow) {
-        outputElement.removeChild(loadingRow);
-    }
+  let table = document.getElementById('myTable');
 
-    // Variable to track total time
-    let totalTime = 0;
+  // Add rows for each promise
+  for (let i = 0; i < time.length; i++) {
+    let row = table.insertRow();
+    let cell1 = row.insertCell();
+    let cell2 = row.insertCell();
+    cell1.textContent = 'Promise ' + (i + 1);
+    cell2.textContent = (time[i] / 1000).toFixed(3) + ' seconds';
+  }
 
-    // Populate the table with the results of each promise
-    results.forEach((result) => {
-        totalTime += result.time;
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${result.id}</td>
-            <td>${result.time}</td>
-        `;
-        outputElement.appendChild(row);
-    });
-
-    // Add the total time row
-    const totalRow = document.createElement('tr');
-    totalRow.innerHTML = `
-        <td>Total</td>
-        <td>${totalTime.toFixed(3)}</td>
-    `;
-    outputElement.appendChild(totalRow);
+  // Add row for total time
+  let totalRow = table.insertRow();
+  let totalCell1 = totalRow.insertCell();
+  let totalCell2 = totalRow.insertCell();
+  totalCell1.textContent = 'Total';
+  totalCell2.textContent = (totalTime / 1000).toFixed(3) + ' seconds';
 });
