@@ -1,3 +1,6 @@
+document.addEventListener('DOMContentLoaded', (event) => {
+  // Your code here
+
 let output = document.getElementById("output");
 
 function createPromise() {
@@ -34,3 +37,4 @@ Promise.all([promise1, promise2, promise3]).then((time) => {
   totalCell1.textContent = 'Total';
   totalCell2.textContent = (totalTime / 1000).toFixed(3) + ' seconds';
 });
+	});
